@@ -1,45 +1,49 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import React from 'react'
+import { Tabs } from 'expo-router'
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Octicons from '@expo/vector-icons/Octicons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+const Layout = () => {
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+   <Tabs 
+    screenOptions={{
+        tabBarStyle: {backgroundColor: "#000", height: 60, paddingBottom: 10},
+        tabBarActiveTintColor: 'white',
+        tabBarInactiveTintColor: "#8e8e8e",
+        headerShown: false
+    }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+            title: "Home",
+            tabBarIcon: ({color, focused}) => (<MaterialCommunityIcons name="home-analytics" size={24} color="black" />)
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="budget"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+            title: "Budget",
+            tabBarIcon: ({color, focused}) => (<Octicons name="checklist" size={24} color="black" />)
         }}
       />
-    </Tabs>
-  );
+      <Tabs.Screen
+        name="history"
+        options={{
+            title: "History",
+            tabBarIcon: ({color, focused}) => (<MaterialIcons name="history" size={24} color="black" />)
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+            title: "Profile",
+            tabBarIcon: ({color, focused}) => (<MaterialCommunityIcons name="face-man-profile" size={24} color="black" />)
+        }}
+      />
+    </Tabs> 
+  )
 }
+
+export default Layout
