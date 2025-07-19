@@ -1,12 +1,16 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
 import React from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { typography } from '@/theme/typography'
 import LoginButton from '@/components/landing-page-components/loginButton'
 import SignUpButton from '@/components/landing-page-components/signUpButton'
+import { useRouter } from 'expo-router'
 
 
 const LandingPage = () => {
+
+    const router = useRouter();
+
   return (
     <LinearGradient 
       style={styles.container}
@@ -14,12 +18,23 @@ const LandingPage = () => {
       locations={[0.21, 1]}
     >
         <Image source={require('../assets/images/trackwise-logo.png')} style={styles.logo} />
+        
         <View>
             <Text style={[typography.heading, styles.title]}>TrackWise</Text>
         </View>
+
+        {/* Login and Sign up buttons */}
         <View style={{gap: 12, marginTop: 36}}>
-            <LoginButton />
-            <SignUpButton /> 
+            <Pressable
+             onPress={() => router.push("/screens/log-in-screen")}
+            >
+                <LoginButton />
+            </Pressable>
+            <Pressable
+             onPress={() => router.push("/screens/sign-up-screen")}
+             >
+                <SignUpButton /> 
+            </Pressable>
         </View>
 
 
@@ -37,7 +52,7 @@ const styles = StyleSheet.create({
     logo: {
         width: 280.63,
         height: 211.07,
-        marginTop: 128
+        marginTop: 142
     },
     title: {
         fontSize: 36,
