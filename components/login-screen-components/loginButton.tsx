@@ -1,13 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, Pressable } from 'react-native'
 import React from 'react'
 import { typography } from '@/theme/typography'
 import { dropShadow } from '@/theme/drop-shadow'
 
-const LoginButton = () => {
+const LoginButton = ({handlePress}: {handlePress: any}) => {
   return (
-    <View style={[dropShadow.shadow, styles.container]}>
+    <Pressable 
+      style={[dropShadow.shadow, styles.container]}
+      onPress={handlePress}
+    >
       <Text style={[typography.button, styles.text]}>Login</Text>
-    </View>
+    </Pressable>
   )
 }
 

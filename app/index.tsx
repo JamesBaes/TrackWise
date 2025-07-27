@@ -25,16 +25,8 @@ const LandingPage = () => {
 
         {/* Login and Sign up buttons */}
         <View style={{gap: 12, marginTop: 36}}>
-            <Pressable
-             onPress={() => router.push("/screens/log-in-screen")}
-            >
-                <LoginButton />
-            </Pressable>
-            <Pressable
-             onPress={() => router.push("/screens/sign-up-screen")}
-             >
-                <SignUpButton /> 
-            </Pressable>
+            <LoginButton handlePress={() => router.push("/screens/log-in-screen")} />
+            <SignUpButton handlePress={() => router.push("/screens/sign-up-screen")}/> 
         </View>
 
 

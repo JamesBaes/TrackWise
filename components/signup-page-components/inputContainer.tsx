@@ -1,13 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, TextInput } from 'react-native'
 import React from 'react'
 import { typography } from '@/theme/typography'
 import { dropShadow } from '@/theme/drop-shadow'
 
-const InputContainer = ({placeholder}: {placeholder: string}) => {
+interface inputValues {
+  placeholder: string,
+  value: string, 
+  onChangeText: any,
+  onBlur: any,
+}
+
+const InputContainer = ({placeholder, value, onChangeText, onBlur}: inputValues) => {
   return (
-    <View style={[dropShadow.shadow, styles.container]}>
-        <Text style={[typography.body, styles.text]}>{placeholder}</Text>
-    </View>
+    <TextInput
+          style={[typography.body, styles.text, dropShadow.shadow, styles.container]}
+          value={value}
+          placeholder={placeholder}
+          onChangeText={onChangeText}
+          onBlur={onBlur}
+        >
+    </TextInput>
   )
 }
 
