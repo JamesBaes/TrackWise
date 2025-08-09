@@ -2,10 +2,10 @@ import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
 import { typography } from '@/theme/typography'
 import { useRouter } from 'expo-router'
-import { Category } from '@/types'
+import { CategoryType } from '@/types'
 
 
-const CategoryCard = ({category, categoryColor, budget, balance}: Category) => {
+const CategoryCard = ({category, categoryColor, budget, balance}: CategoryType) => {
 
     const router = useRouter();
   return (
@@ -24,7 +24,7 @@ const CategoryCard = ({category, categoryColor, budget, balance}: Category) => {
                 style={styles.button}
                 onPress={() => router.replace("/screens/add-transaction-screen")} 
             >
-                <Text style={styles.buttonText}>Add Transaction</Text> 
+                <Text style={[typography.body, styles.buttonText]}>Add Transaction</Text> 
             </Pressable>
         </View>
     </View>

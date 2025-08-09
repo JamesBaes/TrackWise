@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Pressable, Image, ScrollView } from 'react-native'
-import React from 'react'
+import CategoryCard from '@/components/budget-page-components/category-card'
+import CurrentBudgetCard from '@/components/budget-page-components/current-budget-card'
 import { LinearGradient } from 'expo-linear-gradient'
-import CategoryCard from '@/components/budget-page-components.tsx/category-card'
-import CurrentBudgetCard from '@/components/budget-page-components.tsx/current-budget-card'
+import React from 'react'
+import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native'
 
 
 const categoryData = [

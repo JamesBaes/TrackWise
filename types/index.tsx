@@ -6,7 +6,7 @@ export interface User {
     email: string, 
 }
 
-export type Category = {
+export type CategoryType = {
     category: string,
     categoryColor: string,
     budget: number,
@@ -19,10 +19,11 @@ export interface CurrentBudgetCardProps {
     topCategoryColor: string
 }
 
-export interface Transaction {
+export interface TransactionType {
     date: Date,
     transactionName: string,
-    category: Pick<Category, 'category'>,
+    category: { categoryName: string, categoryColor: string},
     amount: number,
+    showDate?: boolean
 }
 
