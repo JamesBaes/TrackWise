@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import { Tabs } from 'expo-router'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Octicons from '@expo/vector-icons/Octicons';
@@ -8,38 +9,38 @@ const Layout = () => {
   return (
    <Tabs 
     screenOptions={{
-        tabBarStyle: {backgroundColor: "#000", height: 60, paddingBottom: 10},
-        tabBarActiveTintColor: 'white',
-        tabBarInactiveTintColor: "#8e8e8e",
-        headerShown: false
+        tabBarStyle: styles.tabBar,
+        tabBarActiveTintColor: "#6088C4",
+        tabBarInactiveTintColor: "black",
+        headerShown: false,
     }}
     >
       <Tabs.Screen
         name="index"
         options={{
             title: "Home",
-            tabBarIcon: ({color, focused}) => (<MaterialCommunityIcons name="home-analytics" size={24} color="black" />)
+            tabBarIcon: ({ focused, color }) => (<MaterialCommunityIcons name="home-analytics" size={26} color={focused ? color : "black"}/>)
         }}
       />
       <Tabs.Screen
         name="budget"
         options={{
             title: "Budget",
-            tabBarIcon: ({color, focused}) => (<Octicons name="checklist" size={24} color="black" />)
+            tabBarIcon: ({ focused, color }) => (<Octicons name="checklist" size={24} color={focused ? color : "black"} />)
         }}
       />
       <Tabs.Screen
         name="history"
         options={{
             title: "History",
-            tabBarIcon: ({color, focused}) => (<MaterialIcons name="history" size={24} color="black" />)
+            tabBarIcon: ({ focused, color }) => (<MaterialIcons name="history" size={24} color={focused ? color : "black"} />)
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
             title: "Profile",
-            tabBarIcon: ({color, focused}) => (<MaterialCommunityIcons name="face-man-profile" size={24} color="black" />)
+            tabBarIcon: ({ focused, color }) => (<MaterialCommunityIcons name="face-man-profile" size={24} color={focused ? color : "black"}/>)
         }}
       />
     </Tabs> 
@@ -47,3 +48,12 @@ const Layout = () => {
 }
 
 export default Layout
+
+const styles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: "#FFFFFF", 
+    height: 56, 
+    padding: 4,
+    gap: 4,
+  },
+})
