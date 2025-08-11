@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         alignItems: "flex-start"
     },
     text: {
-        color: "#FFFFFF",
-        fontSize: 16,
+        color: "gray",
+        fontSize: 14
     }
 })

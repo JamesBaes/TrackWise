@@ -9,6 +9,7 @@ import React, { useState } from 'react'
 import { Image, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 import * as yup from 'yup'
 import { typography } from '@/theme/typography'
+import { useTransactionContext } from "@/context/TransactionContext"
 
 
 const categoryData = [
@@ -35,12 +36,14 @@ const categoryData = [
 const AddTransactionFormSchema = yup.object().shape({
     transactionName: yup.string().required("Transaction name is required"),
     amount: yup.number().typeError("Amount must be a number").required("Amount is required"),
-    date: yup.date().required("Date is required")
+    date: yup.string().matches(/^(?:(?:19|20)\d\d)-(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2\d|3[01])$/).typeError(" Please enter a valid date (e.g. 2025-07-08)").required("Date is required")
 })
 
 const BudgetPage = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null)
+  const transactionContext = useTransactionContext();
+  const addTransaction = transactionContext?.addTransaction;
 
 
   const handleAddTransaction = (category: CategoryType) => {
@@ -49,7 +52,9 @@ const BudgetPage = () => {
   }
 
   const handleAddTransactionSubmit = (transaction: TransactionType) => {
-
+    if (addTransaction) {
+      addTransaction(transaction)
+    }
   }
 
   return (
@@ -114,7 +119,7 @@ const BudgetPage = () => {
                 initialValues={{ 
                   transactionName: "", 
                   amount: 0, 
-                  date: new Date(),
+                  date: "",
                   category: selectedCategory ? { 
                     category: selectedCategory.category, 
                     categoryColor: selectedCategory.categoryColor 
@@ -125,7 +130,7 @@ const BudgetPage = () => {
                   const transaction = {
                     transactionName: values.transactionName,
                     amount: Number(values.amount),
-                    date: values.date,
+                    date: values.date ? new Date(values.date) : new Date(),
                     category: {
                       category: selectedCategory?.category ?? '',
                       categoryColor: selectedCategory?.categoryColor ?? '#000'
@@ -145,7 +150,7 @@ const BudgetPage = () => {
                 }) => (
                   <View style={styles.form}>
                     <View style={styles.inputGroup}>
-                      <Text style={styles.label}>Transaction Name</Text>
+                      <Text style={[typography.body, styles.label]}>Transaction Name</Text>
                       <InputContainer 
                         placeholder="e.g. Starbucks"
                         onChangeText={handleChange('transactionName')}
@@ -153,12 +158,12 @@ const BudgetPage = () => {
                         value={values.transactionName}
                       />
                       {touched.transactionName && errors.transactionName && (
-                        <Text style={styles.errorText}>{errors.transactionName}</Text>
+                        <Text style={[typography.body, styles.errorText, { minHeight: 18 }]}>{errors.transactionName}</Text>
                       )}
                     </View>
 
                     <View style={styles.inputGroup}>
-                      <Text style={styles.label}>Amount</Text>
+                      <Text style={[typography.body, styles.label]}>Amount</Text>
                       <InputContainer 
                         placeholder="e.g. 12.50"
                         onChangeText={handleChange('amount')}
@@ -166,28 +171,28 @@ const BudgetPage = () => {
                         value={values.amount ? values.amount.toString() : ""}
                       />
                       {touched.amount && errors.amount && (
-                        <Text style={styles.errorText}>{errors.amount}</Text>
+                        <Text style={[typography.body, styles.errorText, { minHeight: 18 }]}>{errors.amount}</Text>
                       )}
                     </View>
 
                     <View style={styles.inputGroup}>
-                      <Text style={styles.label}>Date</Text>
+                      <Text style={[typography.body, styles.label]}>Date</Text>
                       <InputContainer 
                         placeholder="e.g. 2025-07-08"
                         onChangeText={handleChange('date')}
                         onBlur={handleBlur('date')}
-                        value={values.date instanceof Date ? values.date.toDateString() : values.date}
+                        value={values.date}
                       />
                       {touched.date && errors.date && (
-                        <Text style={styles.errorText}>{String(errors.date)}</Text>
+                        <Text style={[typography.body, styles.errorText, { minHeight: 18 }]}>{String(errors.date)}</Text>
                       )}
                     </View>
 
                     <View style={styles.inputGroup}>
-                      <Text style={[typography.body,styles.label]}>Category</Text>
+                      <Text style={[typography.body, styles.label, {marginTop: 4}]}>Category</Text>
                       <View style={styles.categoryDisplay}>
                         <View style={[styles.categoryDot, { backgroundColor: selectedCategory?.categoryColor ?? '#ccc' }]} />
-                        <Text style={styles.categoryText}>{selectedCategory?.category ?? 'None selected'}</Text>
+                        <Text style={[typography.body, styles.categoryText]}>{selectedCategory?.category ?? 'None selected'}</Text>
                       </View>
                     </View>
 
@@ -247,7 +252,7 @@ const styles = StyleSheet.create({
     gap: 18,
   },
   inputGroup: {
-    marginBottom: 8,
+    
   },
   label: {
     fontSize: 16,
@@ -258,8 +263,9 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     fontSize: 13,
-    marginTop: 2,
     textAlign: 'right',
+    marginBottom: -16,
+    marginTop: 4
   },
   categoryDisplay: {
     flexDirection: 'row',
@@ -273,7 +279,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
   },
   categoryText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#444',
   },
   overlaySubmitButton: {

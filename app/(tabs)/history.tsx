@@ -3,43 +3,20 @@ import React from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import TransactionCard from '@/components/history-page-components/transaction-card'
 import { typography } from '@/theme/typography'
-
-const mockTransactions = [
-  {
-    date: new Date(2025, 6, 8),
-    transactionName: 'Starbucks',
-    category: { categoryName: 'Food and Drinks', categoryColor: '#FFAE00' },
-    amount: -5.50
-  },
-  {
-    date: new Date(2025, 6, 8),
-    transactionName: 'Uber',
-    category: { categoryName
-      : 'Transport', categoryColor: '#b11b1bff' },
-    amount: -12.00
-  },
-  {
-    date: new Date(2025, 6, 7),
-    transactionName: 'Salary',
-    category: { categoryName: 'Income', categoryColor: '#2C6F00' },
-    amount: 500.00
-  },
-  {
-    date: new Date(2025, 6, 7),
-    transactionName: 'Amazon',
-    category: { categoryName: 'Shopping', categoryColor: '#971391ff' },
-    amount: -45.99
-  }
-]
+import { useTransactionContext } from '@/context/TransactionContext'
 
 const HistoryPage = () => {
+
+  const context = useTransactionContext();
+  const transactions = context?.transactions || [];
+
   {/* Grouping transactions by date*/}
-  const groupedTransactions = mockTransactions.reduce((acc, tx) => {
-  const dateStr = tx.date.toDateString();
-  if (!acc[dateStr]) acc[dateStr] = [];
-  acc[dateStr].push(tx);
-  return acc;
-  }, {} as Record<string, typeof mockTransactions>);
+  const groupedTransactions = transactions.reduce((acc, transaction) => {
+    const dateString = transaction.date.toDateString();
+    if (!acc[dateString]) acc[dateString] = [];
+    acc[dateString].push(transaction);
+    return acc;
+  }, {} as Record<string, typeof transactions>);
   
   return (
     <LinearGradient 
@@ -82,9 +59,16 @@ const HistoryPage = () => {
         </View>
 
         <View style={{gap: 8}}>
-          {Object.entries(groupedTransactions).map(([date, txs]) => (
-            <TransactionCard key={date} date={txs[0].date} transactions={txs} />
-          ))}
+          {Object.entries(groupedTransactions)
+            .sort(([dateA], [dateB]) => new Date(dateB).getTime() - new Date(dateA).getTime())
+            .map(([date, transactions]) => {
+
+            // I had to add one day for display since it would show one day behind from the actual addded transaction date
+            const displayDate = new Date(transactions[0].date)
+            displayDate.setDate(displayDate.getDate() + 1)
+            return(
+            <TransactionCard key={date} date={displayDate} transactions={transactions} />
+          )})}
         </View>
       </ScrollView>
     </LinearGradient>
