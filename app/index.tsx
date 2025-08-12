@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Image} from 'react-native'
 import React from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { typography } from '@/theme/typography'
 import LoginButton from '@/components/landing-page-components/loginButton'
 import SignUpButton from '@/components/landing-page-components/signUpButton'
 import { useRouter } from 'expo-router'
+
 
 
 const LandingPage = () => {
@@ -25,8 +26,8 @@ const LandingPage = () => {
 
         {/* Login and Sign up buttons */}
         <View style={{gap: 12, marginTop: 36}}>
-            <LoginButton handlePress={() => router.push("/screens/log-in-screen")} />
-            <SignUpButton handlePress={() => router.push("/screens/sign-up-screen")}/> 
+            <LoginButton handlePress={() => router.push("/screens/AuthScreens/log-in-screen")} />
+            <SignUpButton handlePress={() => router.push("/screens/AuthScreens/sign-up-screen")}/> 
         </View>
 
 
@@ -39,7 +40,7 @@ export default LandingPage
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
     },
     logo: {
         width: 280.63,

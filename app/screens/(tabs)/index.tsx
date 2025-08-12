@@ -4,8 +4,40 @@ import { LinearGradient } from "expo-linear-gradient"
 import { typography } from "@/theme/typography";
 import BalanceCard from "@/components/home-page-components/balance-card";
 import FinanceOverviewCard from "@/components/home-page-components/finance-overview-card";
+import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
+import { useEffect } from "react";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "@/config/firebase";
 
 const HomePage = () => {
+  const { user } = useAuth();
+  const [userData, setUserData] = useState({ fullName: ""});
+  const [loading, setLoading] = useState(true);
+
+    // Fetch additional user data from Firestore
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user?.uid) {
+        try {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setUserData({ fullName: data.fullName || "" });
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
+
+  const firstName = userData.fullName.split(" ")[0];
+
   return (
     <LinearGradient 
       style={styles.container}
@@ -30,7 +62,7 @@ const HomePage = () => {
         <View style={styles.heading}>
           <Text style={[typography.heading, {fontSize: 32, color: 'white'}]}
           >
-            Welcome, User!
+            Welcome, {firstName}!
           </Text>
         </View>
 

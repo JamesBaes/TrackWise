@@ -8,9 +8,10 @@ interface inputValues {
   value: string, 
   onChangeText: any,
   onBlur: any,
+  secureTextEntry: boolean
 }
 
-const InputContainer = ({placeholder, value, onChangeText, onBlur}: inputValues) => {
+const InputContainer = ({placeholder, value, onChangeText, onBlur, secureTextEntry}: inputValues) => {
   return (
     <TextInput
       style={[typography.body, styles.text, dropShadow.shadow, styles.container]}
@@ -18,6 +19,7 @@ const InputContainer = ({placeholder, value, onChangeText, onBlur}: inputValues)
       placeholder={placeholder}
       onChangeText={onChangeText}
       onBlur={onBlur}
+      secureTextEntry={secureTextEntry}
     >
     </TextInput>
   )

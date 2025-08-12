@@ -9,6 +9,7 @@ import LoginButton from '@/components/login-screen-components/loginButton';
 import { useRouter } from 'expo-router';
 import * as yup from "yup"
 import { Formik } from 'formik'
+import { useAuth } from '@/context/AuthContext';
 
 
 interface LoginFormValues {
@@ -28,9 +29,15 @@ const LoginFormSchema = yup.object().shape({
 
 const Login = () => {
     const router = useRouter();
+    const { signIn } = useAuth();
 
-    const handleSubmit = (values: LoginFormValues) => {
-        // firebase logic here
+    const handleSubmit = async (values: LoginFormValues) => {
+        try {
+            await signIn(values.emailAddress, values.password)
+            router.navigate('/screens/(tabs)')
+        } catch (error) {
+            console.log("An error occured while logging in.", error)
+        }
     }
 
   return (
@@ -67,6 +74,7 @@ const Login = () => {
                         onChangeText={handleChange('emailAddress')}
                         onBlur={handleBlur('emailAddress')}
                         value={values.emailAddress}
+                        secureTextEntry={false}
 
                     />
 
@@ -77,6 +85,7 @@ const Login = () => {
                         onChangeText={handleChange('password')}
                         onBlur={handleBlur('password')}
                         value={values.password}
+                        secureTextEntry={true}
                     />
                     {touched.password && errors.password && <Text style={[typography.body, {color: 'red', textAlign: 'right'}]}>{errors.password}</Text>}
 

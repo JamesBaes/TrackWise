@@ -10,6 +10,7 @@ const TransactionContext = createContext<TransactionContextType | undefined>(und
 
 export const useTransactionContext = () => {
     const context = useContext(TransactionContext)
+    if (!context) throw new Error("useTransactionContext must be used within a Transaction Provider");
     return context
 }
 

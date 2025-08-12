@@ -9,15 +9,19 @@ import SignUpButton from '@/components/signup-page-components/signUpButton';
 
 import * as yup from 'yup';
 import { Formik } from 'formik'
+import { useAuth } from '@/context/AuthContext';
 
 
 interface SignUpFormValues {
+    fullName: string,
     emailAddress: string,
     password: string, 
     confirmPassword: string
 }
 
 const signUpSchema = yup.object().shape({
+    fullName: yup.string()
+        .required(),
     emailAddress: yup.string()
         .email("Invalid Email")
         .required("Email is Required"),
@@ -34,9 +38,15 @@ const signUpSchema = yup.object().shape({
 
 const SignUp = () => {
     const router = useRouter();
+    const { signUp } = useAuth();
 
-    const handleSubmit = (values: SignUpFormValues) => {
-        router.navigate("/(tabs)")
+    const handleSubmit = async (values: SignUpFormValues) => {
+        try {
+            await signUp(values.fullName, values.emailAddress, values.password);
+            router.navigate("/screens/(tabs)");
+        } catch (error) {
+            console.error("Signup failed:", error);
+        }
     }
 
   return (
@@ -54,7 +64,7 @@ const SignUp = () => {
         
         {/* Form for signing up */}
         <Formik<SignUpFormValues>
-            initialValues={{emailAddress: "", password: "", confirmPassword: ""}}
+            initialValues={{fullName: "",emailAddress: "", password: "", confirmPassword: ""}}
             validationSchema={signUpSchema}
             onSubmit={handleSubmit}
         >
@@ -68,10 +78,20 @@ const SignUp = () => {
             }) => (
                 <View style={{gap: 12,}}>
                     <InputContainer 
+                        placeholder='Full Name' 
+                        onChangeText={handleChange('fullName')}
+                        onBlur={handleBlur('fullName')}
+                        value={values.fullName} 
+                        secureTextEntry={false}
+                    />
+                    {touched.fullName && errors.fullName && <Text style={[typography.body, {color: 'red', textAlign: 'right'}]}>{errors.fullName}</Text>}
+
+                    <InputContainer 
                         placeholder='Email Address' 
                         onChangeText={handleChange('emailAddress')}
                         onBlur={handleBlur('emailAddress')}
                         value={values.emailAddress} 
+                        secureTextEntry={false}
                     />
                     {touched.emailAddress && errors.emailAddress && <Text style={[typography.body, {color: 'red', textAlign: 'right'}]}>{errors.emailAddress}</Text>}
                     
@@ -80,6 +100,7 @@ const SignUp = () => {
                         onChangeText={handleChange('password')}
                         onBlur={handleBlur('password')}
                         value={values.password} 
+                        secureTextEntry={true}
                     />
                     {touched.password && errors.password && <Text style={[typography.body, {color: 'red', textAlign: 'right'}]}>{errors.password}</Text>}
                 
@@ -88,6 +109,7 @@ const SignUp = () => {
                         onChangeText={handleChange('confirmPassword')}
                         onBlur={handleBlur('confirmPassword')}
                         value={values.confirmPassword} 
+                        secureTextEntry={true}
                     />
                     {touched.confirmPassword && errors.confirmPassword && <Text style={[typography.body, {color: 'red', textAlign: 'right'}]}>{errors.confirmPassword}</Text>}
 
