@@ -6,12 +6,6 @@ export type CategoryType = {
     onAddTransaction?: () => void
 }
 
-export interface CurrentBudgetCardProps {
-    budget: number,
-    topCategory: string,
-    topCategoryColor: string
-}
-
 export interface TransactionType {
     date: Date,
     transactionName: string,

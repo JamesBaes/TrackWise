@@ -11,40 +11,43 @@ import * as yup from 'yup'
 import { typography } from '@/theme/typography'
 import { useTransactionContext } from "@/context/TransactionContext"
 
-
 const categoryData = [
   {
     category: 'Food and Drinks',
     categoryColor: '#FFAE00',
-    budget: 1000,
-    balance: 500
+    budget: 300,
+    balance: 120
   },
   {
     category: 'Transport',
-    categoryColor: '#b11b1bff',
-    budget: 800,
-    balance: 200
+    categoryColor: '#4F86F7',
+    budget: 200,
+    balance: 75
   },
   {
     category: 'Shopping',
-    categoryColor: '#971391ff',
-    budget: 1200,
-    balance: 900
+    categoryColor: '#FF71D0',
+    budget: 150,
+    balance: 50
+  },
+  {
+    category: 'Bills',
+    categoryColor: '#52D053',
+    budget: 350,
+    balance: 200
   }
-]
+];
 
 const AddTransactionFormSchema = yup.object().shape({
     transactionName: yup.string().required("Transaction name is required"),
     amount: yup.number().typeError("Amount must be a number").required("Amount is required"),
-    date: yup.string().matches(/^(?:(?:19|20)\d\d)-(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2\d|3[01])$/).typeError(" Please enter a valid date (e.g. 2025-07-08)").required("Date is required")
+    date: yup.string().matches(/^(?:(?:19|20)\d\d)-(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2\d|3[01])$/, "Please use YYYY-MM-DD format").typeError(" Please enter a valid date (e.g. 2025-07-08)").required("Date is required")
 })
 
 const BudgetPage = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(null)
-  const transactionContext = useTransactionContext();
-  const addTransaction = transactionContext?.addTransaction;
-
+  const { addTransaction } = useTransactionContext();
 
   const handleAddTransaction = (category: CategoryType) => {
     setSelectedCategory(category)
@@ -52,10 +55,10 @@ const BudgetPage = () => {
   }
 
   const handleAddTransactionSubmit = (transaction: TransactionType) => {
-    if (addTransaction) {
-      addTransaction(transaction)
-    }
+    addTransaction(transaction)
   }
+
+  
 
   return (
     <LinearGradient 
@@ -80,7 +83,6 @@ const BudgetPage = () => {
       >
         <View>
           <CurrentBudgetCard 
-          budget={1000}
           topCategory='Food and Drinks'
           topCategoryColor='#FFAE00'
         />  
@@ -197,7 +199,7 @@ const BudgetPage = () => {
                     </View>
 
                     <Pressable style={styles.overlaySubmitButton} onPress={() => handleSubmit()}>
-                      <Text style={styles.submitText}>Add</Text>
+                      <Text style={styles.submitText}>+</Text>
                     </Pressable>
                   </View>
                 )}
